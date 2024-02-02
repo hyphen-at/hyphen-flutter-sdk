@@ -44,6 +44,7 @@ dependencies:
   build_runner: ^2.1.4
   dio: ^5.4.0
   retrofit: ^4.0.3
+  firebase_messaging: ^14.7.13
 
 dev_dependencies:
   flutter_test:

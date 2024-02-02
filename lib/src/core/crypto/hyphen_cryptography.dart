@@ -11,7 +11,7 @@ import 'package:pointycastle/key_generators/ec_key_generator.dart';
 import 'package:pointycastle/ecc/api.dart';
 
 class HyphenCryptography {
-  static final String ANDROID_KEYSTORE_NAME = 'AndroidKeyStore';
+  static final String ANDROID_KEYSTORE_NAME = 'AndroidKeyStore'; // to-do
   static final String KEY_ALIAS = 'hyphen-device-key';
 
   static AsymmetricKeyPair<PublicKey, PrivateKey>? keyPair;

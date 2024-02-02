@@ -3,7 +3,7 @@ import 'package:event_bus/event_bus.dart';
 
 class HyphenEventBus {
   static final EventBus _eventBus = EventBus();
-  static final _HyphenEventBusInstance _instance = _HyphenEventBusInstance();
+  static final _HyphenEventBusInstance _instance = _HyphenEventBusInstance(); // to-do
 
   static void initialize() {
     //_eventBus.register(_instance);
