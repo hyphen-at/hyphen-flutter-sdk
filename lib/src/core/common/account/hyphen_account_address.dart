@@ -1,3 +1,4 @@
+import 'package:hyphen_flutter_sdk/src/core/common/account/hyphen_chain_type.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'hyphen_account_address.g.dart';
