@@ -43,20 +43,17 @@ class Hyphen {
         'at.hyphen.sdk.credential.ephemeralAccessToken', ephemeralAccessToken);
   }
 
-  @visibleForTesting
   static Future<String?> getEphemeralAccessToken() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     return preferences
         .getString('at.hyphen.sdk.credential.ephemeralAccessToken');
   }
 
-  @visibleForTesting
   static void clearEphemeralAccessToken() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     preferences.remove('at.hyphen.sdk.credential.ephemeralAccessToken');
   }
 
-  @visibleForTesting
   static Future<HyphenCredential> getCredential() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String accessToken =
