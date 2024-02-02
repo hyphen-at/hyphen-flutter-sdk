@@ -1,23 +1,34 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'hyphen_chain_type.g.dart';
-
 enum HyphenChainType {
-  @JsonValue('evm')
+  @JsonValue("evm")
   EVM,
 
-  @JsonValue('cadence')
+  @JsonValue("cadence")
   CADENCE,
 
-  @JsonValue('sealevel')
+  @JsonValue("sealevel")
   SEALEVEL,
 
-  @JsonValue('movevm')
+  @JsonValue("movevm")
   MOVEVM,
 }
 
-HyphenChainType _$HyphenChainTypeFromJson(String value) {
-  switch (value) {
+String _$HyphenChainTypeToJson(HyphenChainType chainType) {
+  switch (chainType) {
+    case HyphenChainType.EVM:
+      return 'evm';
+    case HyphenChainType.CADENCE:
+      return 'cadence';
+    case HyphenChainType.SEALEVEL:
+      return 'sealevel';
+    case HyphenChainType.MOVEVM:
+      return 'movevm';
+  }
+}
+
+HyphenChainType _$HyphenChainTypeFromJson(String json) {
+  switch (json) {
     case 'evm':
       return HyphenChainType.EVM;
     case 'cadence':
@@ -27,16 +38,6 @@ HyphenChainType _$HyphenChainTypeFromJson(String value) {
     case 'movevm':
       return HyphenChainType.MOVEVM;
     default:
-      throw ArgumentError.value(value, 'HyphenChainType');
+      throw ArgumentError('Invalid HyphenChainType value: $json');
   }
 }
-
-String _$HyphenChainTypeToJson(HyphenChainType instance) =>
-    _$HyphenChainTypeToJsonMap[instance];
-
-const _$HyphenChainTypeToJsonMap = {
-  HyphenChainType.EVM: 'evm',
-  HyphenChainType.CADENCE: 'cadence',
-  HyphenChainType.SEALEVEL: 'sealevel',
-  HyphenChainType.MOVEVM: 'movevm',
-};
