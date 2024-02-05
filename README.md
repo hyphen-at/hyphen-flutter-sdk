@@ -1,16 +1,21 @@
-# hyphen_flutter_sdk
+# hyphen-flutter-sdk
 
-A new Flutter project.
+Hyphen aims for Firebase Auth for Web3: non-custodial mobile wallet SDK utilizing user's mobile devices as cold-wallet.
 
-## Getting Started
+## Quick Start
 
-This project is a starting point for a Flutter application.
+### Step 1. Get your API keys
 
-A few resources to get you started if this is your first Flutter project:
+Your API requests are authenticated using API keys. Any request that doesn't include an API key will return an error.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### Step 2. Install the SDK 
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Demo app
+
+The [example]() folder contains a sample app that allows you to test all the features of the Flutter SDK. Open Android Studio project and run your real device.
+
+Your Firebase `google-services.kson` file is required to build the project. Download config file from the Firebase Console and place the file it in the folder where the app module.
+
+## Documentation
+
+See the [Official Hyphen Documentation](https://docs.hyphen.at/android/quick-start) for more information.
