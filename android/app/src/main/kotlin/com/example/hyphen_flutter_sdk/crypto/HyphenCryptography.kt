@@ -1,4 +1,4 @@
-package at.hyphen.android.sdk.core.crypto
+package com.example.hyphen_flutter_sdk.crypto
 
 import android.annotation.SuppressLint
 import android.security.keystore.KeyGenParameterSpec

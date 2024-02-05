@@ -1,4 +1,4 @@
-package at.hyphen.android.sdk.flow
+package com.example.hyphen_flutter_sdk.flow
 
 import at.hyphen.android.sdk.core.Hyphen
 import at.hyphen.android.sdk.core.crypto.HyphenCryptography

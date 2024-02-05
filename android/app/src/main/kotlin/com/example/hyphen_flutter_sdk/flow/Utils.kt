@@ -1,4 +1,4 @@
-package at.hyphen.android.sdk.flow
+package com.example.hyphen_flutter_sdk.flow
 
 import com.nftco.flow.sdk.FlowAccount
 import com.nftco.flow.sdk.FlowAccountKey

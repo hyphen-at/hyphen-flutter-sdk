@@ -21,7 +21,6 @@ class MainActivity : FlutterActivity() {
         // Set up channel 1
         MethodChannel(flutterEngine?.dartExecutor?.binaryMessenger, CHANNEL_1)
                 .setMethodCallHandler { call, result ->
-                    // Handle method calls from Dart here
                     when (call.method) {
                         "isDeviceKeyExist" -> {
                             try {
@@ -88,11 +87,62 @@ class MainActivity : FlutterActivity() {
         // Set up channel 2
         MethodChannel(flutterEngine?.dartExecutor?.binaryMessenger, CHANNEL_2)
                 .setMethodCallHandler { call, result ->
-                    if (call.method == "nativeMethod") {
-                        result.success("Hello from Android!")
-                    } else {
+                  when (call.method) {
+                    "getAccount" -> {
+                      try {
+                        val address = call.argument<String>("address")
+                        val account = getAccount(FlowAddress(address))
+                        val response = mapOf("accountName" to account.name)
+                        result.success(response)
+                      } catch (e: Exception) {
+                          result.error("GET_ACCOUNT_ERROR", e.toString(), null)
+                      }
+                    }
+                    "getAccountKey" -> {
+                      try {
+                        val address = call.argument<String>("address")
+                        val keyIndex = call.argument<Int>("keyIndex")
+                        val accountKey = getAccountKey(FlowAddress(address), keyIndex ?: 0)
+                        val response = mapOf("keyName" to accountKey.name)
+                        result.success(response)
+                      } catch (e: Exception) {
+                          result.error("GET_ACCOUNT_KEY_ERROR", e.toString(), null)
+                      }
+                    }
+                    "waitForSeal" -> {
+                      try {
+                        val txID = call.argument<String>("txID")
+                        val sealedResult = waitForSeal(FlowId(txID))
+                        val response = mapOf("status" to sealedResult.status.toString())
+                        result.success(response)
+                      } catch (e: Exception) {
+                          result.error("WAIT_FOR_SEAL_ERROR", e.toString(), null)
+                      }
+                    }
+                    "signAndSendTransaction" -> {
+                      val cadenceScript = call.argument<String>("cadenceScript")
+                      val arguments = call.argument<List<Map<String, Any>>>("arguments")
+                      val withAuthorizer = call.argument<Boolean>("withAuthorizer")
+
+                      if (cadenceScript != null && arguments != null && withAuthorizer != null) {
+                          // Implement your logic using the provided arguments
+
+                          // For example, call the corresponding Kotlin function:
+                          val transactionId = HyphenFlow.signAndSendTransaction(
+                              cadenceScript,
+                              arguments,
+                              withAuthorizer
+                          )
+
+                          result.success(transactionId)
+                      } else {
+                          result.error("MISSING_ARGUMENTS", "Missing required arguments", null)
+                      }
+                    }
+                    else -> {
                         result.notImplemented()
                     }
+                  }
                 }
     }
 }
