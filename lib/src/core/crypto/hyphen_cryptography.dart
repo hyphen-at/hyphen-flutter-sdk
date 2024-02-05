@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 class HyphenCryptography {
@@ -9,7 +10,9 @@ class HyphenCryptography {
       final bool exists = await platform.invokeMethod('isDeviceKeyExist');
       return exists;
     } catch (e) {
-      print("Failed to check device key existence: $e");
+      if (kDebugMode) {
+        print("Failed to check device key existence: $e");
+      }
       return false;
     }
   }
@@ -17,7 +20,9 @@ class HyphenCryptography {
     try {
       await platform.invokeMethod('generateKey');
     } catch (e) {
-      print("Failed to generate key: $e");
+      if (kDebugMode) {
+        print("Failed to generate key: $e");
+      }
     }
   }
   static Future<String?> getPublicKeyHex() async {
@@ -25,7 +30,9 @@ class HyphenCryptography {
       final String? publicKeyHex = await platform.invokeMethod('getPublicKeyHex');
       return publicKeyHex;
     } catch (e) {
-      print("Failed to get public key hex: $e");
+      if (kDebugMode) {
+        print("Failed to get public key hex: $e");
+      }
       return null;
     }
   }
@@ -34,7 +41,9 @@ class HyphenCryptography {
       final Uint8List? signedData = await platform.invokeMethod('signData', {'data': data});
       return signedData;
     } catch (e) {
-      print("Failed to sign data: $e");
+      if (kDebugMode) {
+        print("Failed to sign data: $e");
+      }
       return null;
     }
   }
@@ -43,7 +52,9 @@ class HyphenCryptography {
       final Uint8List? encryptedData = await platform.invokeMethod('encrypt', {'data': data});
       return encryptedData;
     } catch (e) {
-      print("Failed to encrypt data: $e");
+      if (kDebugMode) {
+        print("Failed to encrypt data: $e");
+      }
       return null;
     }
   }
