@@ -1,8 +1,6 @@
 package com.example.hyphen_flutter_sdk.flow
 
-import at.hyphen.android.sdk.core.Hyphen
-import at.hyphen.android.sdk.core.crypto.HyphenCryptography
-import at.hyphen.android.sdk.networking.HyphenNetworking
+import com.example.hyphen_flutter_sdk.crypto.HyphenCryptography
 import com.nftco.flow.sdk.Flow
 import com.nftco.flow.sdk.FlowAddress
 import com.nftco.flow.sdk.FlowArgument

@@ -1,6 +1,14 @@
 package com.example.hyphen_flutter_sdk
 
 import android.os.Bundle
+import com.example.hyphen_flutter_sdk.crypto.HyphenCryptography
+import com.example.hyphen_flutter_sdk.flow.HyphenFlow
+import com.example.hyphen_flutter_sdk.flow.getAccount
+import com.example.hyphen_flutter_sdk.flow.getAccountKey
+import com.example.hyphen_flutter_sdk.flow.waitForSeal
+import com.nftco.flow.sdk.FlowAddress
+import com.nftco.flow.sdk.FlowArgument
+import com.nftco.flow.sdk.FlowId
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
@@ -91,7 +99,7 @@ class MainActivity : FlutterActivity() {
                     "getAccount" -> {
                       try {
                         val address = call.argument<String>("address")
-                        val account = getAccount(FlowAddress(address))
+                        val account = address?.let { FlowAddress(it) }?.let { getAccount(it) }
                         val response = mapOf("accountName" to account.name)
                         result.success(response)
                       } catch (e: Exception) {
@@ -102,7 +110,7 @@ class MainActivity : FlutterActivity() {
                       try {
                         val address = call.argument<String>("address")
                         val keyIndex = call.argument<Int>("keyIndex")
-                        val accountKey = getAccountKey(FlowAddress(address), keyIndex ?: 0)
+                        val accountKey = address?.let { FlowAddress(it) }?.let { getAccountKey(it, keyIndex ?: 0) }
                         val response = mapOf("keyName" to accountKey.name)
                         result.success(response)
                       } catch (e: Exception) {
@@ -112,8 +120,8 @@ class MainActivity : FlutterActivity() {
                     "waitForSeal" -> {
                       try {
                         val txID = call.argument<String>("txID")
-                        val sealedResult = waitForSeal(FlowId(txID))
-                        val response = mapOf("status" to sealedResult.status.toString())
+                        val sealedResult = txID?.let { FlowId(it) }?.let { waitForSeal(it) }
+                        val response = mapOf("status" to sealedResult?.status.toString())
                         result.success(response)
                       } catch (e: Exception) {
                           result.error("WAIT_FOR_SEAL_ERROR", e.toString(), null)
@@ -125,12 +133,9 @@ class MainActivity : FlutterActivity() {
                       val withAuthorizer = call.argument<Boolean>("withAuthorizer")
 
                       if (cadenceScript != null && arguments != null && withAuthorizer != null) {
-                          // Implement your logic using the provided arguments
-
-                          // For example, call the corresponding Kotlin function:
                           val transactionId = HyphenFlow.signAndSendTransaction(
                               cadenceScript,
-                              arguments,
+                              arguments as List<FlowArgument>,
                               withAuthorizer
                           )
 

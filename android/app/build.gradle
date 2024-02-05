@@ -64,4 +64,7 @@ flutter {
     source '../..'
 }
 
-dependencies {}
+dependencies {
+    api("com.jakewharton.timber:timber:5.0.1")
+    api("com.nftco:flow-jvm-sdk:0.7.3")
+}
