@@ -5,7 +5,7 @@ class HyphenFlow {
 
   static Future<String> signAndSendTransaction(
     String cadenceScript,
-    List<Map<String, dynamic>> arguments,
+    List<Map<String, dynamic>> arguments, //to-do: see if the FlowArgument model can be mimicked
     bool withAuthorizer,
   ) async {
     try {
