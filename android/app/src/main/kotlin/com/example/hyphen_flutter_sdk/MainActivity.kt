@@ -26,174 +26,176 @@ class MainActivity : FlutterActivity() {
 
         // Set up channel 1
         flutterEngine?.dartExecutor?.binaryMessenger?.let {
-            MethodChannel(it, CHANNEL_1)
-                    .setMethodCallHandler { call, result ->
-                        when (call.method) {
-                            "isDeviceKeyExist" -> {
-                                try {
-                                    val deviceKeyExists = HyphenCryptography.isDeviceKeyExist();
-                                    result.success(deviceKeyExists);
-                                } catch (e: Exception) {
-                                    result.error("ERROR_CODE", "Error checking device key existence", null);
-                                }
-                            }
-
-                            "generateKey" -> {
-                                try {
-                                    HyphenCryptography.generateKey();
-                                    result.success(true);
-                                } catch (e: Exception) {
-                                    result.error("ERROR_CODE", "Error generating key", null);
-                                }
-                            }
-
-                            "getPublicKeyHex" -> {
-                                try {
-                                    val publicKeyHex = HyphenCryptography.getPublicKeyHex();
-                                    result.success(publicKeyHex);
-                                } catch (e: Exception) {
-                                    result.error("ERROR_CODE", "Error getting public key hex", null);
-                                }
-                            }
-
-                            "signData" -> {
-                                val data = call.argument<List<Int>>("data");
-                                if (data != null) {
-                                    lifecycleScope.launch {
-                                        try {
-                                            val byteArrayData = data.map { it -> it.toByte() }.toByteArray()
-                                            val resultData = HyphenCryptography.signData(byteArrayData)
-                                            result.success(resultData)
-                                        } catch (e: Exception) {
-                                            result.error("ERROR_CODE", "Error signing data", null)
-                                        }
-                                    }
-                                } else {
-                                    result.error("MISSING_ARGUMENTS", "Missing data argument", null)
-                                }
-
-                            }
-
-                            "encrypt" -> {
-                                try {
-                                    val data = call.argument<List<Int>>("data");
-                                    val byteArrayData = data?.map { it -> it.toByte() }?.toByteArray()
-                                    val resultData = byteArrayData?.let { it1 -> HyphenCryptography.encrypt(it1) }
-                                    result.success(resultData);
-                                } catch (e: Exception) {
-                                    result.error("ERROR_CODE", "Error encrypting data", null);
-                                }
-                            }
-
-                            "decrypt" -> {
-                                try {
-                                    val data = call.argument<List<Int>>("data");
-                                    val byteArrayData = data?.map { it -> it.toByte() }?.toByteArray()
-                                    val resultData = byteArrayData?.let { it1 -> HyphenCryptography.decrypt(it1) }
-                                    result.success(resultData);
-                                } catch (e: Exception) {
-                                    result.error("ERROR_CODE", "Error decrypting data", null);
-                                }
-                            }
-
-                            else -> {
-                                result.notImplemented()
-                            }
+            MethodChannel(it, CHANNEL_1).setMethodCallHandler { call, result ->
+                when (call.method) {
+                    "isDeviceKeyExist" -> {
+                        try {
+                            val deviceKeyExists = HyphenCryptography.isDeviceKeyExist();
+                            result.success(deviceKeyExists);
+                        } catch (e: Exception) {
+                            result.error("ERROR_CODE", "Error checking device key existence", null);
                         }
                     }
+
+                    "generateKey" -> {
+                        try {
+                            HyphenCryptography.generateKey();
+                            result.success(true);
+                        } catch (e: Exception) {
+                            result.error("ERROR_CODE", "Error generating key", null);
+                        }
+                    }
+
+                    "getPublicKeyHex" -> {
+                        try {
+                            val publicKeyHex = HyphenCryptography.getPublicKeyHex();
+                            result.success(publicKeyHex);
+                        } catch (e: Exception) {
+                            result.error("ERROR_CODE", "Error getting public key hex", null);
+                        }
+                    }
+
+                    "signData" -> {
+                        val data = call.argument<List<Int>>("data");
+                        if (data != null) {
+                            lifecycleScope.launch {
+                                try {
+                                    val byteArrayData = data.map { it -> it.toByte() }.toByteArray()
+                                    val resultData = HyphenCryptography.signData(byteArrayData)
+                                    result.success(resultData)
+                                } catch (e: Exception) {
+                                    result.error("ERROR_CODE", "Error signing data", null)
+                                }
+                            }
+                        } else {
+                            result.error("MISSING_ARGUMENTS", "Missing data argument", null)
+                        }
+
+                    }
+
+                    "encrypt" -> {
+                        try {
+                            val data = call.argument<List<Int>>("data");
+                            val byteArrayData = data?.map { it -> it.toByte() }?.toByteArray()
+                            val resultData = byteArrayData?.let { it1 -> HyphenCryptography.encrypt(it1) }
+                            result.success(resultData);
+                        } catch (e: Exception) {
+                            result.error("ERROR_CODE", "Error encrypting data", null);
+                        }
+                    }
+
+                    "decrypt" -> {
+                        try {
+                            val data = call.argument<List<Int>>("data");
+                            val byteArrayData = data?.map { it -> it.toByte() }?.toByteArray()
+                            val resultData = byteArrayData?.let { it1 -> HyphenCryptography.decrypt(it1) }
+                            result.success(resultData);
+                        } catch (e: Exception) {
+                            result.error("ERROR_CODE", "Error decrypting data", null);
+                        }
+                    }
+
+                    else -> {
+                        result.notImplemented()
+                    }
+                }
+            }
         }
         // Set up channel 2
         flutterEngine?.dartExecutor?.binaryMessenger?.let {
-            MethodChannel(it, CHANNEL_2)
-                    .setMethodCallHandler { call, result ->
-                        when (call.method) {
-                            "signAndSendTransaction" -> {
-                                val cadenceScript = call.argument<String>("cadenceScript")
-                                val arguments = call.argument<List<Map<String, Any>>>("arguments")
-                                val withAuthorizer = call.argument<Boolean>("withAuthorizer")
+            MethodChannel(it, CHANNEL_2).setMethodCallHandler { call, result ->
+                when (call.method) {
+                    "signAndSendTransaction" -> {
+                        val cadenceScript = call.argument<String>("cadenceScript")
+                        val arguments = call.argument<List<Map<String, Any>>>("arguments")
+                        val withAuthorizer = call.argument<Boolean>("withAuthorizer")
 
-                                if (cadenceScript != null && arguments != null && withAuthorizer != null) {
-                                    lifecycleScope.launch {
-                                        try {
-                                            val transactionId = HyphenFlow.signAndSendTransaction(
-                                                    cadenceScript,
-                                                    arguments as List<FlowArgument>,
-                                                    withAuthorizer
-                                            )
+                        if (cadenceScript != null && arguments != null && withAuthorizer != null) {
+                            lifecycleScope.launch {
+                                try {
+                                    val transactionId = HyphenFlow.signAndSendTransaction(cadenceScript, arguments as List<FlowArgument>, withAuthorizer)
 
-                                            result.success(transactionId)
-                                        } catch (e: Exception) {
-                                            result.error("TRANSACTION_ERROR", "Error processing transaction", null)
-                                        }
-                                    }
-                                } else {
-                                    result.error("MISSING_ARGUMENTS", "Missing required arguments", null)
+                                    result.success(transactionId)
+                                } catch (e: Exception) {
+                                    result.error("TRANSACTION_ERROR", "Error processing transaction", null)
                                 }
                             }
-
-                            else -> {
-                                result.notImplemented()
-                            }
+                        } else {
+                            result.error("MISSING_ARGUMENTS", "Missing required arguments", null)
                         }
                     }
+
+                    else -> {
+                        result.notImplemented()
+                    }
+                }
+            }
         }
         // Set up channel 3
         flutterEngine?.dartExecutor?.binaryMessenger?.let {
-            MethodChannel(it, CHANNEL_3)
-                    .setMethodCallHandler { call, result ->
-                        when (call.method) {
-                            "getAccount" -> {
-                                try {
-                                    val resultData = HyphenAuthenticate.getAccount()
-                                    result.success(resultData);
-                                } catch (e: Exception) {
-                                    result.error("ERROR_CODE", "Failed to get account", null);
-                                }
-                            }
+            MethodChannel(it, CHANNEL_3).setMethodCallHandler { call, result ->
+                when (call.method) {
+                    "getAccount" -> {
 
-                            "authenticate" -> {
-                                try {
-                                    val webClientId = call.argument<String>("webClientId");
-                                    val resultData = HyphenAuthenticate.authenticate(webClientId = webClientId)
-                                    result.success(resultData);
-                                } catch (e: Exception) {
-                                    result.error("ERROR_CODE", "Failed to authenticate", null);
-                                }
-                            }
-
-                            else -> {
-                                result.notImplemented()
+                        lifecycleScope.launch {
+                            try {
+                                val resultData = HyphenAuthenticate.getAccount(context)
+                                result.success(resultData)
+                            } catch (e: Exception) {
+                                result.error("ERROR_CODE", "Failed to get account", null)
                             }
                         }
                     }
+
+                    "authenticate" -> {
+                        val webClientId = call.argument<String>("webClientId");
+                        if (webClientId != null) {
+                            lifecycleScope.launch {
+                                try {
+                                    val resultData = HyphenAuthenticate.authenticate(activity, webClientId)
+                                    result.success(resultData);
+
+                                } catch (e: Exception) {
+                                    result.error("ERROR_CODE", "Error authenticating", null)
+                                }
+                            }
+                        } else {
+                            result.error("MISSING_ARGUMENTS", "Missing required arguments", null)
+                        }
+                    }
+
+                    else -> {
+                        result.notImplemented()
+                    }
+                }
+            }
         }
         // Set up channel 4
         flutterEngine?.dartExecutor?.binaryMessenger?.let {
-            MethodChannel(it, CHANNEL_4)
-                    .setMethodCallHandler { call, result ->
-                        when (call.method) {
-                            "authenticate" -> {
-                                val webClientId = call.argument<String>("webClientId");
-                                if (webClientId != null) {
-                                    lifecycleScope.launch {
-                                        try {
-                                            val resultData = HyphenGoogleAuthenticate.authenticate(webClientId = webClientId)
-                                            result.success(resultData);
+            MethodChannel(it, CHANNEL_4).setMethodCallHandler { call, result ->
+                when (call.method) {
+                    "authenticate" -> {
+                        val webClientId = call.argument<String>("webClientId");
+                        if (webClientId != null) {
+                            lifecycleScope.launch {
+                                try {
+                                    val resultData = HyphenGoogleAuthenticate.authenticate(activity, webClientId)
+                                    result.success(resultData);
 
-                                        } catch (e: Exception) {
-                                            result.error("ERROR_CODE", "Error authenticating via Google", null)
-                                        }
-                                    }
-                                } else {
-                                    result.error("MISSING_ARGUMENTS", "Missing required arguments", null)
+                                } catch (e: Exception) {
+                                    result.error("ERROR_CODE", "Error authenticating via Google", null)
                                 }
                             }
-
-                            else -> {
-                                result.notImplemented()
-                            }
+                        } else {
+                            result.error("MISSING_ARGUMENTS", "Missing required arguments", null)
                         }
                     }
+
+                    else -> {
+                        result.notImplemented()
+                    }
+                }
+            }
         }
     }
 }
