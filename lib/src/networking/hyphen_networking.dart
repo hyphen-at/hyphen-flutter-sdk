@@ -7,6 +7,7 @@ import 'package:hyphen_flutter_sdk/src/networking/api/auth_api.dart';
 import 'package:hyphen_flutter_sdk/src/networking/api/device_api.dart';
 import 'package:hyphen_flutter_sdk/src/networking/api/key_api.dart';
 import 'package:hyphen_flutter_sdk/src/networking/api/sign_api.dart';
+import 'package:hyphen_flutter_sdk/src/networking/interceptor/hyphen_header_interceptor.dart';
 import 'package:hyphen_flutter_sdk/src/networking/request/hyphen_request_2fa_approve.dart';
 import 'package:hyphen_flutter_sdk/src/networking/request/hyphen_request_2fa_finish.dart';
 import 'package:hyphen_flutter_sdk/src/networking/request/hyphen_request_edit_device.dart';
@@ -25,7 +26,15 @@ final baseUrl = Hyphen.network == NetworkType.TESTNET
     ? "https://api.dev.hyphen.at/"
     : "https://api.hyphen.at/";
 
-final accountApi = AccountAPI(Dio(), baseUrl: baseUrl);
+List<Interceptor> interceptors() {
+  return [
+    HyphenHeaderInterceptor(),
+  ];
+}
+
+Dio dio = Dio()..interceptors.addAll(interceptors());
+
+final accountApi = AccountAPI(dio, baseUrl: baseUrl);
 
 class Account {
   static Future<HyphenAccount> getAccount() async {
@@ -35,7 +44,7 @@ class Account {
   }
 }
 
-final authApi = AuthAPI(Dio(), baseUrl: baseUrl);
+final authApi = AuthAPI(dio, baseUrl: baseUrl);
 
 class Auth {
   static Future<HyphenResponseSignIn2FA> signIn2FA(HyphenRequestSignIn2FA payload) async {
@@ -67,7 +76,7 @@ class Auth {
   }
 }
 
-final deviceApi = DeviceAPI(Dio(), baseUrl: baseUrl);
+final deviceApi = DeviceAPI(dio, baseUrl: baseUrl);
 
 class Device {
   static Future<void> editDevice(String publicKey, HyphenRequestEditDevice payload) async {
@@ -87,7 +96,7 @@ class Device {
   }
 }
 
-final keyApi = KeyAPI(Dio(), baseUrl: baseUrl);
+final keyApi = KeyAPI(dio, baseUrl: baseUrl);
 
 class Key {
   static Future<List<HyphenKey>> getKeys() async {
@@ -96,7 +105,7 @@ class Key {
   }
 }
 
-final signApi = SignAPI(Dio(), baseUrl: baseUrl);
+final signApi = SignAPI(dio, baseUrl: baseUrl);
 
 class Sign {
   static Future<HyphenSignResult> signTransactionWithServerKey(String message) async {
