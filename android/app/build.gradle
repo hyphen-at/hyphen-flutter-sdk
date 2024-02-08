@@ -67,4 +67,9 @@ flutter {
 dependencies {
     api("com.jakewharton.timber:timber:5.0.1")
     api("com.nftco:flow-jvm-sdk:0.7.3")
+    implementation("at.hyphen:android-sdk-core:1.0.0-alpha06")
+    implementation("at.hyphen:android-sdk-authenticate:1.0.0-alpha06")
+    implementation("at.hyphen:android-sdk-networking:1.0.0-alpha06")
+    implementation("at.hyphen:android-sdk-ui:1.0.0-alpha06")
+    implementation("at.hyphen:android-sdk-flow:1.0.0-alpha06")
 }
