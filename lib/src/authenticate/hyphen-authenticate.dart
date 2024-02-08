@@ -26,36 +26,4 @@ class HyphenAuthenticate {
       }
     }
   }
-
-  static Future<void> updateDeviceInformation() async {
-    try {
-      await platform.invokeMethod<void>('updateDeviceInformation');
-    } on PlatformException catch (e) {
-      if (kDebugMode) {
-        print("Failed to update device information: '${e.message}'.");
-      }
-    }
-  }
-
-  static Future<void> requestSignIn2FA(String idToken, HyphenUserKey userKey) async {
-    try {
-      await platform.invokeMethod<void>('requestSignIn2FA', {"idToken": idToken, "userKey": userKey.toJson()});
-    } on PlatformException catch (e) {
-      if (kDebugMode) {
-        print("Failed to request 2FA authentication: '${e.message}'.");
-      }
-    }
-  }
-
-  static Future<HyphenUserKey?> getHyphenUserKey() async {
-    try {
-      final Map<String, dynamic> result = await platform.invokeMethod('getHyphenUserKey');
-      return HyphenUserKey.fromJson(result);
-    } on PlatformException catch (e) {
-      if (kDebugMode) {
-        print("Failed to get Hyphen user key: '${e.message}'.");
-      }
-      return null;
-    }
-  }
 }

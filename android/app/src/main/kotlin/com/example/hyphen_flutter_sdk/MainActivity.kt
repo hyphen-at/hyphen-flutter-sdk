@@ -2,6 +2,8 @@ package com.example.hyphen_flutter_sdk
 
 import android.os.Bundle
 import androidx.lifecycle.lifecycleScope
+import at.hyphen.android.sdk.authenticate.HyphenAuthenticate
+import at.hyphen.android.sdk.authenticate.HyphenGoogleAuthenticate
 import at.hyphen.android.sdk.core.crypto.HyphenCryptography
 import at.hyphen.android.sdk.flow.HyphenFlow
 import com.nftco.flow.sdk.FlowArgument
@@ -13,11 +15,10 @@ import kotlinx.coroutines.launch
 
 class MainActivity : FlutterActivity() {
 
-    // Example 1
     private val CHANNEL_1 = "hyphen_flutter_sdk/crypto"
-
-    // Example 2
     private val CHANNEL_2 = "hyphen_flutter_sdk/flow"
+    private val CHANNEL_3 = "hyphen_flutter_sdk/authenticate"
+    private val CHANNEL_4 = "hyphen_flutter_sdk/google-authenticate"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -112,7 +113,7 @@ class MainActivity : FlutterActivity() {
                                 val withAuthorizer = call.argument<Boolean>("withAuthorizer")
 
                                 if (cadenceScript != null && arguments != null && withAuthorizer != null) {
-                                    lifecycleScope.launch { // Use lifecycleScope here
+                                    lifecycleScope.launch {
                                         try {
                                             val transactionId = HyphenFlow.signAndSendTransaction(
                                                     cadenceScript,
@@ -123,6 +124,64 @@ class MainActivity : FlutterActivity() {
                                             result.success(transactionId)
                                         } catch (e: Exception) {
                                             result.error("TRANSACTION_ERROR", "Error processing transaction", null)
+                                        }
+                                    }
+                                } else {
+                                    result.error("MISSING_ARGUMENTS", "Missing required arguments", null)
+                                }
+                            }
+
+                            else -> {
+                                result.notImplemented()
+                            }
+                        }
+                    }
+        }
+        // Set up channel 3
+        flutterEngine?.dartExecutor?.binaryMessenger?.let {
+            MethodChannel(it, CHANNEL_3)
+                    .setMethodCallHandler { call, result ->
+                        when (call.method) {
+                            "getAccount" -> {
+                                try {
+                                    val resultData = HyphenAuthenticate.getAccount()
+                                    result.success(resultData);
+                                } catch (e: Exception) {
+                                    result.error("ERROR_CODE", "Failed to get account", null);
+                                }
+                            }
+
+                            "authenticate" -> {
+                                try {
+                                    val webClientId = call.argument<String>("webClientId");
+                                    val resultData = HyphenAuthenticate.authenticate(webClientId = webClientId)
+                                    result.success(resultData);
+                                } catch (e: Exception) {
+                                    result.error("ERROR_CODE", "Failed to authenticate", null);
+                                }
+                            }
+
+                            else -> {
+                                result.notImplemented()
+                            }
+                        }
+                    }
+        }
+        // Set up channel 4
+        flutterEngine?.dartExecutor?.binaryMessenger?.let {
+            MethodChannel(it, CHANNEL_4)
+                    .setMethodCallHandler { call, result ->
+                        when (call.method) {
+                            "authenticate" -> {
+                                val webClientId = call.argument<String>("webClientId");
+                                if (webClientId != null) {
+                                    lifecycleScope.launch {
+                                        try {
+                                            val resultData = HyphenGoogleAuthenticate.authenticate(webClientId = webClientId)
+                                            result.success(resultData);
+
+                                        } catch (e: Exception) {
+                                            result.error("ERROR_CODE", "Error authenticating via Google", null)
                                         }
                                     }
                                 } else {
