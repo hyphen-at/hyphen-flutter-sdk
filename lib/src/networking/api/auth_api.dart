@@ -12,9 +12,9 @@ import 'package:hyphen_flutter_sdk/src/networking/response/hyphen_response_sign_
 
 part 'auth_api.g.dart';
 
-@RestApi(baseUrl: "base_url_here")
+@RestApi()
 abstract class AuthAPI {
-  factory AuthAPI(Dio dio, {String baseUrl}) = _AuthAPI;
+  factory AuthAPI(Dio dio, {String? baseUrl}) = _AuthAPI;
 
   @POST("auth/v1/signin/2fa")
   Future<HyphenResponseSignIn2FA> signIn2FA(@Body() HyphenRequestSignIn2FA requestPayload);

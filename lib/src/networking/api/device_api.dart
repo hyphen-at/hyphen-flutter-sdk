@@ -7,9 +7,9 @@ import 'package:dio/dio.dart';
 
 part 'device_api.g.dart';
 
-@RestApi(baseUrl: "base_url_here")
+@RestApi()
 abstract class DeviceAPI {
-  factory DeviceAPI(Dio dio, {String baseUrl}) = _DeviceAPI;
+  factory DeviceAPI(Dio dio, {String? baseUrl}) = _DeviceAPI;
 
   @PUT("device/v1/devices/{publicKey}")
   Future<void> editDevice(

@@ -21,7 +21,11 @@ import 'package:hyphen_flutter_sdk/src/networking/response/hyphen_response_sign_
 import 'package:hyphen_flutter_sdk/src/networking/response/hyphen_response_sign_in_challenge.dart';
 import 'package:hyphen_flutter_sdk/src/networking/response/hyphen_sign_result.dart';
 
-final accountApi = AccountAPI(Dio());
+final baseUrl = Hyphen.network == NetworkType.TESTNET
+    ? "https://api.dev.hyphen.at/"
+    : "https://api.hyphen.at/";
+
+final accountApi = AccountAPI(Dio(), baseUrl: baseUrl);
 
 class Account {
   static Future<HyphenAccount> getAccount() async {
@@ -31,7 +35,7 @@ class Account {
   }
 }
 
-final authApi = AuthAPI(Dio());
+final authApi = AuthAPI(Dio(), baseUrl: baseUrl);
 
 class Auth {
   static Future<HyphenResponseSignIn2FA> signIn2FA(HyphenRequestSignIn2FA payload) async {
@@ -63,7 +67,7 @@ class Auth {
   }
 }
 
-final deviceApi = DeviceAPI(Dio());
+final deviceApi = DeviceAPI(Dio(), baseUrl: baseUrl);
 
 class Device {
   static Future<void> editDevice(String publicKey, HyphenRequestEditDevice payload) async {
@@ -83,7 +87,7 @@ class Device {
   }
 }
 
-final keyApi = KeyAPI(Dio());
+final keyApi = KeyAPI(Dio(), baseUrl: baseUrl);
 
 class Key {
   static Future<List<HyphenKey>> getKeys() async {
@@ -92,7 +96,7 @@ class Key {
   }
 }
 
-final signApi = SignAPI(Dio());
+final signApi = SignAPI(Dio(), baseUrl: baseUrl);
 
 class Sign {
   static Future<HyphenSignResult> signTransactionWithServerKey(String message) async {

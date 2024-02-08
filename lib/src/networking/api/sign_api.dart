@@ -6,9 +6,9 @@ import 'package:hyphen_flutter_sdk/src/networking/response/hyphen_sign_result.da
 
 part 'sign_api.g.dart';
 
-@RestApi(baseUrl: "base_url_here")
+@RestApi()
 abstract class SignAPI {
-  factory SignAPI(Dio dio, {String baseUrl}) = _SignAPI;
+  factory SignAPI(Dio dio, {String? baseUrl}) = _SignAPI;
 
   @POST("sign/v1/cadence/transaction")
   Future<HyphenSignResult> signTransactionWithServerKey(@Body() HyphenRequestSign requestPayload);

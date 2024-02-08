@@ -12,9 +12,7 @@ class _KeyAPI implements KeyAPI {
   _KeyAPI(
     this._dio, {
     this.baseUrl,
-  }) {
-    baseUrl ??= 'base_url_here';
-  }
+  });
 
   final Dio _dio;
 

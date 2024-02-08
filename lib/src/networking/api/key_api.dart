@@ -4,9 +4,9 @@ import 'package:dio/dio.dart';
 
 part 'key_api.g.dart';
 
-@RestApi(baseUrl: "base_url_here")
+@RestApi()
 abstract class KeyAPI {
-  factory KeyAPI(Dio dio, {String baseUrl}) = _KeyAPI;
+  factory KeyAPI(Dio dio, {String? baseUrl}) = _KeyAPI;
 
   @GET("key/v1/keys")
   Future<HyphenResponseKeys> getKeys();

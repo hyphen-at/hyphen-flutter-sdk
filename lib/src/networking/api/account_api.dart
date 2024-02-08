@@ -4,9 +4,9 @@ import 'package:hyphen_flutter_sdk/src/networking/response/hyphen_response_my_ac
 
 part 'account_api.g.dart';
 
-@RestApi(baseUrl: "base_url_here")
+@RestApi()
 abstract class AccountAPI {
-  factory AccountAPI(Dio dio, {String baseUrl}) = _AccountAPI;
+  factory AccountAPI(Dio dio, {String? baseUrl}) = _AccountAPI;
 
   @GET("account/v1/me")
   Future<HyphenResponseMyAccount> getMyAccount();

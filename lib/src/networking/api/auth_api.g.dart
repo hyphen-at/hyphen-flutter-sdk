@@ -12,9 +12,7 @@ class _AuthAPI implements AuthAPI {
   _AuthAPI(
     this._dio, {
     this.baseUrl,
-  }) {
-    baseUrl ??= 'base_url_here';
-  }
+  });
 
   final Dio _dio;
 
