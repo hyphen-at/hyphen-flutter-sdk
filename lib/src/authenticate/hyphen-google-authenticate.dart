@@ -1,10 +1,20 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:hyphen_flutter_sdk/src/core/common/key/hyphen_user_key.dart';
 
 class HyphenGoogleAuthenticate {
   
   static const platform = MethodChannel('hyphen_flutter_sdk/google-authenticate');
 
-  
+  static Future<UserCredential?> authenticate(String webClientId) async {
+    try {
+      final UserCredential result = await platform.invokeMethod('authenticate', {"webClientId": webClientId});
+      return result;
+    } on PlatformException catch (e) {
+      if (kDebugMode) {
+        print("Failed to authenticate: '${e.message}'.");
+      }
+      return null;
+    }
+  }
 }
