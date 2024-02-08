@@ -36,7 +36,6 @@ class Hyphen {
         'at.hyphen.sdk.credential.refreshToken', credential.refreshToken);
   }
 
-  @visibleForTesting
   static void saveEphemeralAccessToken(String ephemeralAccessToken) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     preferences.setString(
