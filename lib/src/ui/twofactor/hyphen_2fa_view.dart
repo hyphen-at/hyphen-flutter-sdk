@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:hyphen_flutter_sdk/hyphen_flutter_sdk.dart';
 import 'package:hyphen_flutter_sdk/src/core/common/twofactor/hyphen_2fa_status.dart';
 
 class Hyphen2FAView extends StatefulWidget {
@@ -7,7 +6,7 @@ class Hyphen2FAView extends StatefulWidget {
   final VoidCallback onApproveButtonClick;
   final VoidCallback onDenyButtonClick;
 
-  Hyphen2FAView({
+  const Hyphen2FAView({super.key, 
     required this.status,
     required this.onApproveButtonClick,
     required this.onDenyButtonClick,
