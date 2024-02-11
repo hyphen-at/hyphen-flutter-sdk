@@ -1,15 +1,17 @@
 package com.example.hyphen_flutter_sdk
 
+import androidx.lifecycle.lifecycleScope
 import at.hyphen.android.sdk.authenticate.HyphenAuthenticate
 import at.hyphen.android.sdk.authenticate.HyphenGoogleAuthenticate
 import at.hyphen.android.sdk.core.crypto.HyphenCryptography
 import at.hyphen.android.sdk.flow.HyphenFlow
 import com.nftco.flow.sdk.FlowArgument
 import io.flutter.embedding.engine.plugins.FlutterPlugin
-import io.flutter.plugin.common.MethodChannel.MethodCallHandler
+import io.flutter.plugin.common.MethodCall
+import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.launch
 
-class FlutterMethodChannel : FlutterPlugin, MethodCallHandler {
+class FlutterMethodChannel : FlutterPlugin, MethodChannel.MethodCallHandler {
 
     private lateinit var channel_1: MethodChannel
     private lateinit var channel_2: MethodChannel
