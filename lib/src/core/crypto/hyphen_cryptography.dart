@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:hyphen_flutter_sdk/src/networking/response/hyphen_sign_result.dart';
 
 class HyphenCryptography {
 

@@ -1,24 +1,50 @@
 package com.example.hyphen_flutter_sdk
 
-import android.os.Bundle
-import androidx.lifecycle.lifecycleScope
 import at.hyphen.android.sdk.authenticate.HyphenAuthenticate
 import at.hyphen.android.sdk.authenticate.HyphenGoogleAuthenticate
 import at.hyphen.android.sdk.core.crypto.HyphenCryptography
 import at.hyphen.android.sdk.flow.HyphenFlow
 import com.nftco.flow.sdk.FlowArgument
-import io.flutter.embedding.android.FlutterActivity
-import io.flutter.embedding.engine.FlutterEngine
-import io.flutter.plugin.common.MethodChannel
-import io.flutter.plugins.GeneratedPluginRegistrant
+import io.flutter.embedding.engine.plugins.FlutterPlugin
+import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import kotlinx.coroutines.launch
 
-class MainActivity : FlutterActivity() {
+class MethodChannel : FlutterPlugin, MethodCallHandler {
 
-    private val CHANNEL_1 = "hyphen_flutter_sdk/crypto"
-    private val CHANNEL_2 = "hyphen_flutter_sdk/flow"
-    private val CHANNEL_3 = "hyphen_flutter_sdk/authenticate"
-    private val CHANNEL_4 = "hyphen_flutter_sdk/google-authenticate"
+    private lateinit var channel_1 : MethodChannel
+    private lateinit var channel_2 : MethodChannel
+    private lateinit var channel_3 : MethodChannel
+    private lateinit var channel_4 : MethodChannel
+
+    override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
+    channel_1 = MethodChannel(flutterPluginBinding.binaryMessenger, "hyphen_flutter_sdk/crypto")
+    channel_1.setMethodCallHandler(this)
+
+    channel_2 = MethodChannel(flutterPluginBinding.binaryMessenger, "hyphen_flutter_sdk/flow")
+    channel_2.setMethodCallHandler(this)
+
+    channel_3 = MethodChannel(flutterPluginBinding.binaryMessenger, "hyphen_flutter_sdk/authenticate")
+    channel_3.setMethodCallHandler(this)
+
+    channel_4 = MethodChannel(flutterPluginBinding.binaryMessenger, "hyphen_flutter_sdk/google-authenticate")
+    channel_4.setMethodCallHandler(this)
+    }
+
+    override fun onMethodCall(call: MethodCall, result: Result) {
+        if (call.method == "getPlatformVersion") {
+          result.success("Android ${android.os.Build.VERSION.RELEASE}")
+        } else {
+          result.notImplemented()
+        }
+      }
+
+      override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
+        channel_1.setMethodCallHandler(null)
+        channel_2.setMethodCallHandler(null)
+        channel_3.setMethodCallHandler(null)
+        channel_4.setMethodCallHandler(null)
+      }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

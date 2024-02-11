@@ -1,4 +1,4 @@
-group 'com.example.test'
+group 'com.example.hyphen_flutter_sdk'
 version '1.0-SNAPSHOT'
 
 buildscript {
@@ -9,13 +9,8 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.3.0'
+        classpath 'com.android.tools.build:gradle:8.2.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        implementation "at.hyphen:android-sdk-core:1.0.0-alpha06"
-        implementation "at.hyphen:android-sdk-authenticate:1.0.0-alpha06"
-        implementation "at.hyphen:android-sdk-networking:1.0.0-alpha06"
-        implementation "at.hyphen:android-sdk-ui:1.0.0-alpha06"
-        implementation "at.hyphen:android-sdk-flow:1.0.0-alpha06"
     }
 }
 
@@ -31,7 +26,7 @@ apply plugin: 'kotlin-android'
 
 android {
     if (project.android.hasProperty("namespace")) {
-        namespace 'com.example.test'
+        namespace 'com.example.hyphen_flutter_sdk'
     }
 
     compileSdkVersion 33
@@ -70,4 +65,14 @@ android {
             }
         }
     }
+}
+
+dependencies {
+    implementation project(':')
+    implementation "at.hyphen:android-sdk-core:1.0.0-alpha06"
+    implementation "at.hyphen:android-sdk-authenticate:1.0.0-alpha06"
+    implementation "at.hyphen:android-sdk-networking:1.0.0-alpha06"
+    implementation "at.hyphen:android-sdk-ui:1.0.0-alpha06"
+    implementation "at.hyphen:android-sdk-flow:1.0.0-alpha06"
+    implementation "com.nftco.flow.sdk:0.7.4"
 }

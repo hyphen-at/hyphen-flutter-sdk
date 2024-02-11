@@ -46,8 +46,8 @@ flutter:
   plugin:
     platforms:
       android:
-        package: com.example.test
-        pluginClass: TestPlugin
+        package: com.example.hyphen_flutter_sdk
+        pluginClass: MethodChannel
       ios:
         pluginClass: MethodChannel
   # The following line ensures that the Material Icons font is
