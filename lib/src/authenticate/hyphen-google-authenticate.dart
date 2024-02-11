@@ -8,7 +8,7 @@ class HyphenGoogleAuthenticate {
 
   static Future<UserCredential?> authenticate(String webClientId) async {
     try {
-      final UserCredential result = await platform.invokeMethod('authenticate', {"webClientId": webClientId});
+      final UserCredential result = await platform.invokeMethod('googleAuthenticate', {"webClientId": webClientId});
       return result;
     } on PlatformException catch (e) {
       if (kDebugMode) {
