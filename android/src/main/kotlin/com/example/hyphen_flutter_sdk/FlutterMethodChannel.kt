@@ -1,17 +1,19 @@
 package com.example.hyphen_flutter_sdk
 
-import androidx.lifecycle.lifecycleScope
 import at.hyphen.android.sdk.authenticate.HyphenAuthenticate
 import at.hyphen.android.sdk.authenticate.HyphenGoogleAuthenticate
+import at.hyphen.android.sdk.core.common.account.HyphenAccount
 import at.hyphen.android.sdk.core.crypto.HyphenCryptography
 import at.hyphen.android.sdk.flow.HyphenFlow
+import com.google.firebase.auth.AuthResult
 import com.nftco.flow.sdk.FlowArgument
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 
 class FlutterMethodChannel : FlutterPlugin, MethodChannel.MethodCallHandler {
+
 
     private lateinit var channel_1: MethodChannel
     private lateinit var channel_2: MethodChannel
@@ -63,14 +65,12 @@ class FlutterMethodChannel : FlutterPlugin, MethodChannel.MethodCallHandler {
             }
 
             "signData" -> {
-                val data = call.argument<List<Int>>("data");
+                val data = call.argument<List<Int>>("data")
                 if (data != null) {
-                    lifecycleScope.launch {
-                        try {
-                            val byteArrayData = data.map { it -> it.toByte() }.toByteArray()
-                            val resultData = HyphenCryptography.signData(byteArrayData)
-                            result.success(resultData)
-                        } catch (e: Exception) {
+                    signData(data) { signedData ->
+                        if (signedData != null) {
+                            result.success(signedData)
+                        } else {
                             result.error("ERROR_CODE", "Error signing data", null)
                         }
                     }
@@ -109,12 +109,10 @@ class FlutterMethodChannel : FlutterPlugin, MethodChannel.MethodCallHandler {
                 val withAuthorizer = call.argument<Boolean>("withAuthorizer")
 
                 if (cadenceScript != null && arguments != null && withAuthorizer != null) {
-                    lifecycleScope.launch {
-                        try {
-                            val transactionId = HyphenFlow.signAndSendTransaction(cadenceScript, arguments as List<FlowArgument>, withAuthorizer)
-
+                    signAndSendTransaction(cadenceScript, arguments, withAuthorizer) { transactionId ->
+                        if (transactionId != null) {
                             result.success(transactionId)
-                        } catch (e: Exception) {
+                        } else {
                             result.error("TRANSACTION_ERROR", "Error processing transaction", null)
                         }
                     }
@@ -124,26 +122,22 @@ class FlutterMethodChannel : FlutterPlugin, MethodChannel.MethodCallHandler {
             }
 
             "getAccount" -> {
-
-                lifecycleScope.launch {
-                    try {
-                        val resultData = HyphenAuthenticate.getAccount(context)
+                getAccount { resultData ->
+                    if (resultData != null) {
                         result.success(resultData)
-                    } catch (e: Exception) {
+                    } else {
                         result.error("ERROR_CODE", "Failed to get account", null)
                     }
                 }
             }
 
             "authenticate" -> {
-                val webClientId = call.argument<String>("webClientId");
+                val webClientId = call.argument<String>("webClientId")
                 if (webClientId != null) {
-                    lifecycleScope.launch {
-                        try {
-                            val resultData = HyphenAuthenticate.authenticate(activity, webClientId)
-                            result.success(resultData);
-
-                        } catch (e: Exception) {
+                    authenticate(webClientId) { resultData ->
+                        if (resultData != null) {
+                            result.success(resultData)
+                        } else {
                             result.error("ERROR_CODE", "Error authenticating", null)
                         }
                     }
@@ -152,15 +146,14 @@ class FlutterMethodChannel : FlutterPlugin, MethodChannel.MethodCallHandler {
                 }
             }
 
-            "googleAuthenticate" -> {
-                val webClientId = call.argument<String>("webClientId");
-                if (webClientId != null) {
-                    lifecycleScope.launch {
-                        try {
-                            val resultData = HyphenGoogleAuthenticate.authenticate(activity, webClientId)
-                            result.success(resultData);
 
-                        } catch (e: Exception) {
+            "googleAuthenticate" -> {
+                val webClientId = call.argument<String>("webClientId")
+                if (webClientId != null) {
+                    googleAuthenticate(webClientId) { resultData ->
+                        if (resultData != null) {
+                            result.success(resultData)
+                        } else {
                             result.error("ERROR_CODE", "Error authenticating via Google", null)
                         }
                     }
@@ -181,5 +174,66 @@ class FlutterMethodChannel : FlutterPlugin, MethodChannel.MethodCallHandler {
         channel_3.setMethodCallHandler(null)
         channel_4.setMethodCallHandler(null)
     }
+
+    private fun signData(data: List<Int>, callback: (ByteArray?) -> Unit) {
+        try {
+            val byteArrayData = data.map { it.toByte() }.toByteArray()
+            val resultData = runBlocking {
+                HyphenCryptography.signData(byteArrayData)
+            }
+            callback(resultData)
+        } catch (e: Exception) {
+            callback(null)
+        }
+    }
+
+    private fun signAndSendTransaction(
+            cadenceScript: String,
+            arguments: List<Map<String, Any>>,
+            withAuthorizer: Boolean,
+            callback: (String?) -> Unit
+    ) {
+        try {
+            val transactionId = runBlocking {
+                HyphenFlow.signAndSendTransaction(
+                        cadenceScript,
+                        arguments as List<FlowArgument>,
+                        withAuthorizer
+                )
+            }
+            callback(transactionId)
+        } catch (e: Exception) {
+            callback(null)
+        }
+    }
+
+    private fun getAccount(callback: (HyphenAccount?) -> Unit) {
+        try {
+            val resultData = runBlocking { HyphenAuthenticate.getAccount(context) }
+            callback(resultData)
+        } catch (e: Exception) {
+            callback(null)
+        }
+    }
+
+    private fun authenticate(webClientId: String, callback: (Unit?) -> Unit) {
+        try {
+            val resultData = runBlocking { HyphenAuthenticate.authenticate(activity, webClientId) }
+            callback(resultData)
+        } catch (e: Exception) {
+            callback(null)
+        }
+    }
+
+    private fun googleAuthenticate(webClientId: String, callback: (AuthResult?) -> Unit) {
+        try {
+            val resultData = runBlocking { HyphenGoogleAuthenticate.authenticate(activity, webClientId) }
+            callback(resultData)
+
+        } catch (e: Exception) {
+            callback(null)
+        }
+    }
+
 
 }
