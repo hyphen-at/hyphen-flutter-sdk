@@ -1,5 +1,7 @@
 package com.example.hyphen_flutter_sdk
 
+import android.app.Activity
+import android.content.Context
 import at.hyphen.android.sdk.authenticate.HyphenAuthenticate
 import at.hyphen.android.sdk.authenticate.HyphenGoogleAuthenticate
 import at.hyphen.android.sdk.core.common.account.HyphenAccount
@@ -122,19 +124,25 @@ class FlutterMethodChannel : FlutterPlugin, MethodChannel.MethodCallHandler {
             }
 
             "getAccount" -> {
-                getAccount { resultData ->
-                    if (resultData != null) {
-                        result.success(resultData)
-                    } else {
-                        result.error("ERROR_CODE", "Failed to get account", null)
+                val context = call.argument<Context?>("context")
+                if (context != null) {
+                    getAccount(context) { resultData ->
+                        if (resultData != null) {
+                            result.success(resultData)
+                        } else {
+                            result.error("ERROR_CODE", "Failed to get account", null)
+                        }
                     }
+                } else {
+                    result.error("MISSING_ARGUMENTS", "Missing required arguments", null)
                 }
             }
 
             "authenticate" -> {
                 val webClientId = call.argument<String>("webClientId")
-                if (webClientId != null) {
-                    authenticate(webClientId) { resultData ->
+                val activity: Activity? = call.argument("activity")
+                if (webClientId != null && activity != null) {
+                    authenticate(activity, webClientId) { resultData ->
                         if (resultData != null) {
                             result.success(resultData)
                         } else {
@@ -149,8 +157,9 @@ class FlutterMethodChannel : FlutterPlugin, MethodChannel.MethodCallHandler {
 
             "googleAuthenticate" -> {
                 val webClientId = call.argument<String>("webClientId")
-                if (webClientId != null) {
-                    googleAuthenticate(webClientId) { resultData ->
+                val activity: Activity? = call.argument("activity")
+                if (webClientId != null && activity != null) {
+                    googleAuthenticate(activity, webClientId) { resultData ->
                         if (resultData != null) {
                             result.success(resultData)
                         } else {
@@ -207,7 +216,7 @@ class FlutterMethodChannel : FlutterPlugin, MethodChannel.MethodCallHandler {
         }
     }
 
-    private fun getAccount(callback: (HyphenAccount?) -> Unit) {
+    private fun getAccount(context: Context, callback: (HyphenAccount?) -> Unit) {
         try {
             val resultData = runBlocking { HyphenAuthenticate.getAccount(context) }
             callback(resultData)
@@ -216,7 +225,7 @@ class FlutterMethodChannel : FlutterPlugin, MethodChannel.MethodCallHandler {
         }
     }
 
-    private fun authenticate(webClientId: String, callback: (Unit?) -> Unit) {
+    private fun authenticate(activity: Activity, webClientId: String, callback: (Unit?) -> Unit) {
         try {
             val resultData = runBlocking { HyphenAuthenticate.authenticate(activity, webClientId) }
             callback(resultData)
@@ -225,7 +234,7 @@ class FlutterMethodChannel : FlutterPlugin, MethodChannel.MethodCallHandler {
         }
     }
 
-    private fun googleAuthenticate(webClientId: String, callback: (AuthResult?) -> Unit) {
+    private fun googleAuthenticate(activity: Activity, webClientId: String, callback: (AuthResult?) -> Unit) {
         try {
             val resultData = runBlocking { HyphenGoogleAuthenticate.authenticate(activity, webClientId) }
             callback(resultData)
