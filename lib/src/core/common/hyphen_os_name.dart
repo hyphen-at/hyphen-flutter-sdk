@@ -1,5 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 
+part 'hyphen_os_name.g.dart';
+
 enum HyphenOSName {
   IOS,
   IPADOS,

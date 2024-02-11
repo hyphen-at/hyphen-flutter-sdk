@@ -11,39 +11,39 @@ import kotlinx.coroutines.launch
 
 class MethodChannel : FlutterPlugin, MethodCallHandler {
 
-    private lateinit var channel_1 : MethodChannel
-    private lateinit var channel_2 : MethodChannel
-    private lateinit var channel_3 : MethodChannel
-    private lateinit var channel_4 : MethodChannel
+    private lateinit var channel_1: MethodChannel
+    private lateinit var channel_2: MethodChannel
+    private lateinit var channel_3: MethodChannel
+    private lateinit var channel_4: MethodChannel
 
     override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
-    channel_1 = MethodChannel(flutterPluginBinding.binaryMessenger, "hyphen_flutter_sdk/crypto")
-    channel_1.setMethodCallHandler(this)
+        channel_1 = MethodChannel(flutterPluginBinding.binaryMessenger, "hyphen_flutter_sdk/crypto")
+        channel_1.setMethodCallHandler(this)
 
-    channel_2 = MethodChannel(flutterPluginBinding.binaryMessenger, "hyphen_flutter_sdk/flow")
-    channel_2.setMethodCallHandler(this)
+        channel_2 = MethodChannel(flutterPluginBinding.binaryMessenger, "hyphen_flutter_sdk/flow")
+        channel_2.setMethodCallHandler(this)
 
-    channel_3 = MethodChannel(flutterPluginBinding.binaryMessenger, "hyphen_flutter_sdk/authenticate")
-    channel_3.setMethodCallHandler(this)
+        channel_3 = MethodChannel(flutterPluginBinding.binaryMessenger, "hyphen_flutter_sdk/authenticate")
+        channel_3.setMethodCallHandler(this)
 
-    channel_4 = MethodChannel(flutterPluginBinding.binaryMessenger, "hyphen_flutter_sdk/google-authenticate")
-    channel_4.setMethodCallHandler(this)
+        channel_4 = MethodChannel(flutterPluginBinding.binaryMessenger, "hyphen_flutter_sdk/google-authenticate")
+        channel_4.setMethodCallHandler(this)
     }
 
     override fun onMethodCall(call: MethodCall, result: Result) {
         if (call.method == "getPlatformVersion") {
-          result.success("Android ${android.os.Build.VERSION.RELEASE}")
+            result.success("Android ${android.os.Build.VERSION.RELEASE}")
         } else {
-          result.notImplemented()
+            result.notImplemented()
         }
-      }
+    }
 
-      override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
+    override fun onDetachedFromEngine(binding: FlutterPlugin.FlutterPluginBinding) {
         channel_1.setMethodCallHandler(null)
         channel_2.setMethodCallHandler(null)
         channel_3.setMethodCallHandler(null)
         channel_4.setMethodCallHandler(null)
-      }
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

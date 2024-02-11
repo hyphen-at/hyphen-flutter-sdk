@@ -1,5 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 
+part 'hyphen_user_type.g.dart';
+
 enum HyphenUserType {
   @JsonValue('device')
   DEVICE,
