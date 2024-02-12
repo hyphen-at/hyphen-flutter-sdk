@@ -94,3 +94,4 @@ public class MethodChannel: NSObject, FlutterPlugin {
     }
   }
 }
+}
