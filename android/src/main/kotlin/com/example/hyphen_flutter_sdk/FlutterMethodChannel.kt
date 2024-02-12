@@ -10,17 +10,39 @@ import at.hyphen.android.sdk.flow.HyphenFlow
 import com.google.firebase.auth.AuthResult
 import com.nftco.flow.sdk.FlowArgument
 import io.flutter.embedding.engine.plugins.FlutterPlugin
+import io.flutter.embedding.engine.plugins.activity.ActivityAware
+import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import kotlinx.coroutines.runBlocking
 
-class FlutterMethodChannel : FlutterPlugin, MethodChannel.MethodCallHandler {
+
+class FlutterMethodChannel : FlutterPlugin, MethodChannel.MethodCallHandler, ActivityAware {
 
 
     private lateinit var channel_1: MethodChannel
     private lateinit var channel_2: MethodChannel
     private lateinit var channel_3: MethodChannel
     private lateinit var channel_4: MethodChannel
+
+    private lateinit var context: Context
+    private lateinit var activity: Activity
+
+    override fun onDetachedFromActivity() {
+        TODO("Not yet implemented")
+    }
+
+    override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
+        activity = binding.activity
+    }
+
+    override fun onAttachedToActivity(binding: ActivityPluginBinding) {
+        activity = binding.activity;
+    }
+
+    override fun onDetachedFromActivityForConfigChanges() {
+        TODO("Not yet implemented")
+    }
 
     override fun onAttachedToEngine(flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         channel_1 = MethodChannel(flutterPluginBinding.binaryMessenger, "hyphen_flutter_sdk/crypto")
@@ -34,6 +56,8 @@ class FlutterMethodChannel : FlutterPlugin, MethodChannel.MethodCallHandler {
 
         channel_4 = MethodChannel(flutterPluginBinding.binaryMessenger, "hyphen_flutter_sdk/google-authenticate")
         channel_4.setMethodCallHandler(this)
+
+        context = flutterPluginBinding.applicationContext
     }
 
     override fun onMethodCall(call: MethodCall, result: Result) {
@@ -124,24 +148,19 @@ class FlutterMethodChannel : FlutterPlugin, MethodChannel.MethodCallHandler {
             }
 
             "getAccount" -> {
-                val context = call.argument<Context?>("context")
-                if (context != null) {
-                    getAccount(context) { resultData ->
-                        if (resultData != null) {
-                            result.success(resultData)
-                        } else {
-                            result.error("ERROR_CODE", "Failed to get account", null)
-                        }
+                getAccount(context) { resultData ->
+                    if (resultData != null) {
+                        result.success(resultData)
+                    } else {
+                        result.error("ERROR_CODE", "Failed to get account", null)
                     }
-                } else {
-                    result.error("MISSING_ARGUMENTS", "Missing required arguments", null)
                 }
+
             }
 
             "authenticate" -> {
                 val webClientId = call.argument<String>("webClientId")
-                val activity: Activity? = call.argument("activity")
-                if (webClientId != null && activity != null) {
+                if (webClientId != null) {
                     authenticate(activity, webClientId) { resultData ->
                         if (resultData != null) {
                             result.success(resultData)
@@ -157,8 +176,7 @@ class FlutterMethodChannel : FlutterPlugin, MethodChannel.MethodCallHandler {
 
             "googleAuthenticate" -> {
                 val webClientId = call.argument<String>("webClientId")
-                val activity: Activity? = call.argument("activity")
-                if (webClientId != null && activity != null) {
+                if (webClientId != null) {
                     googleAuthenticate(activity, webClientId) { resultData ->
                         if (resultData != null) {
                             result.success(resultData)
