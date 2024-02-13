@@ -16,15 +16,6 @@ class HyphenCryptography {
       return false;
     }
   }
-  static Future<void> generateKey() async {
-    try {
-      await platform.invokeMethod('generateKey');
-    } catch (e) {
-      if (kDebugMode) {
-        print("Failed to generate key: $e");
-      }
-    }
-  }
   static Future<String?> getPublicKeyHex() async {
     try {
       final String? publicKeyHex = await platform.invokeMethod('getPublicKeyHex');

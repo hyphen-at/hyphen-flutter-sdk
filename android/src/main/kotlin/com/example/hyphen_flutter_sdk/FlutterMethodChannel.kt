@@ -37,7 +37,7 @@ class FlutterMethodChannel : FlutterPlugin, MethodChannel.MethodCallHandler, Act
     }
 
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
-        activity = binding.activity;
+        activity = binding.activity
     }
 
     override fun onDetachedFromActivityForConfigChanges() {
@@ -65,28 +65,19 @@ class FlutterMethodChannel : FlutterPlugin, MethodChannel.MethodCallHandler, Act
             // Channel 1
             "isDeviceKeyExist" -> {
                 try {
-                    val deviceKeyExists = HyphenCryptography.isDeviceKeyExist();
-                    result.success(deviceKeyExists);
+                    val deviceKeyExists = HyphenCryptography.isDeviceKeyExist()
+                    result.success(deviceKeyExists)
                 } catch (e: Exception) {
-                    result.error("ERROR_CODE", "Error checking device key existence", null);
-                }
-            }
-
-            "generateKey" -> {
-                try {
-                    HyphenCryptography.generateKey();
-                    result.success(true);
-                } catch (e: Exception) {
-                    result.error("ERROR_CODE", "Error generating key", null);
+                    result.error("ERROR_CODE", "Error checking device key existence", null)
                 }
             }
 
             "getPublicKeyHex" -> {
                 try {
-                    val publicKeyHex = HyphenCryptography.getPublicKeyHex();
-                    result.success(publicKeyHex);
+                    val publicKeyHex = HyphenCryptography.getPublicKeyHex()
+                    result.success(publicKeyHex)
                 } catch (e: Exception) {
-                    result.error("ERROR_CODE", "Error getting public key hex", null);
+                    result.error("ERROR_CODE", "Error getting public key hex", null)
                 }
             }
 
@@ -108,23 +99,23 @@ class FlutterMethodChannel : FlutterPlugin, MethodChannel.MethodCallHandler, Act
 
             "encrypt" -> {
                 try {
-                    val data = call.argument<List<Int>>("data");
-                    val byteArrayData = data?.map { it -> it.toByte() }?.toByteArray()
+                    val data = call.argument<List<Int>>("data")
+                    val byteArrayData = data?.map { it.toByte() }?.toByteArray()
                     val resultData = byteArrayData?.let { it1 -> HyphenCryptography.encrypt(it1) }
-                    result.success(resultData);
+                    result.success(resultData)
                 } catch (e: Exception) {
-                    result.error("ERROR_CODE", "Error encrypting data", null);
+                    result.error("ERROR_CODE", "Error encrypting data", null)
                 }
             }
 
             "decrypt" -> {
                 try {
-                    val data = call.argument<List<Int>>("data");
-                    val byteArrayData = data?.map { it -> it.toByte() }?.toByteArray()
+                    val data = call.argument<List<Int>>("data")
+                    val byteArrayData = data?.map { it.toByte() }?.toByteArray()
                     val resultData = byteArrayData?.let { it1 -> HyphenCryptography.decrypt(it1) }
-                    result.success(resultData);
+                    result.success(resultData)
                 } catch (e: Exception) {
-                    result.error("ERROR_CODE", "Error decrypting data", null);
+                    result.error("ERROR_CODE", "Error decrypting data", null)
                 }
             }
 
@@ -158,6 +149,7 @@ class FlutterMethodChannel : FlutterPlugin, MethodChannel.MethodCallHandler, Act
 
             }
 
+            // Channel 3
             "authenticate" -> {
                 val webClientId = call.argument<String>("webClientId")
                 if (webClientId != null) {
@@ -173,7 +165,7 @@ class FlutterMethodChannel : FlutterPlugin, MethodChannel.MethodCallHandler, Act
                 }
             }
 
-
+            // Channel 4
             "googleAuthenticate" -> {
                 val webClientId = call.argument<String>("webClientId")
                 if (webClientId != null) {

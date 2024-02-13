@@ -30,7 +30,6 @@ public class MethodChannel: NSObject, FlutterPlugin {
     case "isDeviceKeyExist":
       let isKeyExist = HyphenCryptography.isDeviceKeyExist()
       result(isKeyExist)
-    case "generateKey":
     case "getPublicKeyHex": 
         let publicKeyHex = HyphenCryptography.getPublicKeyHex()
         result(publicKeyHex)
