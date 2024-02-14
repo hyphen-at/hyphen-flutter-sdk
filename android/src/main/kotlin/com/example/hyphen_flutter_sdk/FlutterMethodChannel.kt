@@ -19,7 +19,6 @@ import kotlinx.coroutines.runBlocking
 
 class FlutterMethodChannel : FlutterPlugin, MethodChannel.MethodCallHandler, ActivityAware {
 
-
     private lateinit var channel_1: MethodChannel
     private lateinit var channel_2: MethodChannel
     private lateinit var channel_3: MethodChannel
@@ -60,7 +59,7 @@ class FlutterMethodChannel : FlutterPlugin, MethodChannel.MethodCallHandler, Act
         context = flutterPluginBinding.applicationContext
     }
 
-    override fun onMethodCall(call: MethodCall, result: Result) {
+    override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
         when (call.method) {
             // Channel 1
             "isDeviceKeyExist" -> {
