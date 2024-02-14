@@ -24,7 +24,7 @@ class Hyphen {
   }
 
   static void initialize(BuildContext context) {
-    HyphenEventBus.initialize();
+    HyphenEventBus();
     HyphenSecurePreferences.initialize();
   }
 
