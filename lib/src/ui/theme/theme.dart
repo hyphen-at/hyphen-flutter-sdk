@@ -48,17 +48,6 @@ class HyphenUITheme extends StatelessWidget {
   }
 }
 
-final DarkColorScheme = ThemeData.dark().copyWith(
-  primaryColor: HyphenTheme.purple80,
-  //accentColor: HyphenTheme.purpleGrey80,
-  //tertiaryColor: HyphenTheme.pink80
-);
-
-final LightColorScheme = ThemeData.light().copyWith(
-  primaryColor: HyphenTheme.purple40,
-  //accentColor: HyphenTheme.purpleGrey40,
-  //tertiaryColor: HyphenTheme.pink40
-);
 
 ColorScheme dynamicDarkColorScheme(BuildContext context) {
   return const ColorScheme.dark(
@@ -66,7 +55,7 @@ ColorScheme dynamicDarkColorScheme(BuildContext context) {
     secondary: HyphenTheme.purpleGrey80,
     tertiary: HyphenTheme.pink80,
     // surface: Colors.grey[900],
-    //background: Colors.grey[850],
+    // background: Colors.grey[850],
     // onPrimary: Colors.white,
     // onSecondary: Colors.white,
     // onSurface: Colors.white,
