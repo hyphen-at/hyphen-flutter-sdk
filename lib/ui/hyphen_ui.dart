@@ -6,6 +6,7 @@ import 'package:hyphen_flutter_sdk/core/common/twofactor/hyphen_2fa_status_type.
 import 'package:hyphen_flutter_sdk/core/eventbus/hyphen_event_bus.dart';
 import 'package:hyphen_flutter_sdk/core/eventbus/hyphen_event_bus_type.dart';
 import 'package:hyphen_flutter_sdk/networking/response/hyphen_response_sign_in_2fa.dart';
+import 'package:hyphen_flutter_sdk/ui/twofactor/hyphen_2fa_activity.dart';
 
 class HyphenUI {
   static Hyphen2FAStatus? pendingTwoFactorStatus;
