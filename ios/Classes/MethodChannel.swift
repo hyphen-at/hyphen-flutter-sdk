@@ -70,15 +70,11 @@ public class MethodChannel: NSObject, FlutterPlugin {
             result(FlutterError(code: "ERROR_GET_ACCOUNT", message: "Error getting account", details: nil))
         }
     case "authenticate": 
-        guard let method = call.arguments as? Int else {
-            result(FlutterError(code: "INVALID_ARGUMENT", message: "Invalid method argument", details: nil))
-            return
-        }
-        do {
-            try self?.authenticate(method: method)
-            result(nil)
+        gdo {
+            let credential = try HyphenGoogleAuthenticate.shared.authenticate() // default to Google auth method
+            result(credential)
         } catch {
-            result(FlutterError(code: "ERROR_AUTHENTICATE", message: "Error authenticating", details: nil))
+            result(FlutterError(code: "google_auth_error", message: "Error authenticating", details: nil))
         }
     // Channel 4
     case: "googleAuthenticate": {
