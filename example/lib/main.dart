@@ -34,17 +34,16 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
-Future<void> loginWithGoogle() async {
+  Future<void> loginWithGoogle() async {
     setState(() {
       isLoading = true;
     });
 
     try {
       await HyphenAuthenticate.authenticate(
-              "201778913659-dn4bo82q6hce3kfp7vstp04b22nh5hbi.apps.googleusercontent.com");
+          "201778913659-dn4bo82q6hce3kfp7vstp04b22nh5hbi.apps.googleusercontent.com");
 
-      final hyphenAccount =
-          await HyphenAuthenticate.getAccount();
+      final hyphenAccount = await HyphenAuthenticate.getAccount();
 
       setState(() {
         authText = "Authenticate Result : $hyphenAccount";
@@ -71,7 +70,8 @@ Future<void> loginWithGoogle() async {
                   log("Hello World!!!")
               }
           }
-        """.trim(),
+        """
+            .trim(),
         [],
         false,
       );
