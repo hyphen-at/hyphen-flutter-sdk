@@ -70,7 +70,7 @@ public class MethodChannel: NSObject, FlutterPlugin {
         result(FlutterError(code: "DECRYPTION_ERROR", message: "Decryption failed", details: nil))
       }
     // Channel 2
-    case signAndSendTransaction:
+    case "signAndSendTransaction":
       if let arguments = call.arguments as? [String: Any],
         let cadenceScript = arguments["cadenceScript"] as? String,
         let argumentsList = arguments["arguments"] as? [[String: Any]],
