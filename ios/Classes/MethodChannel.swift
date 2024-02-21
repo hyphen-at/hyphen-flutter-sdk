@@ -76,15 +76,21 @@ public class MethodChannel: NSObject, FlutterPlugin {
         let argumentsList = arguments["arguments"] as? [[String: Any]],
         let withAuthorizer = arguments["withAuthorizer"] as? Bool
       {
+        do {
+          let transaction = try await HyphenFlow.shared.makeSignedTransactionPayloadWithArguments(
+            hyphenFlowCadence: cadenceScript,
+            args: argumentsList
+          )
 
-        let transaction = try await HyphenFlow.shared.makeSignedTransactionPayloadWithArguments(
-          hyphenFlowCadence: cadenceScript,
-          args: argumentsList
-        )
+          let txHash = try await HyphenFlow.shared.sendSignedTransaction(transaction)
 
-        let txHash = try await HyphenFlow.shared.sendSignedTransaction(transaction)
-
-        result(txHash)
+          result(txHash)
+        } catch {
+          result(
+            FlutterError(
+              code: "ERROR_SIGN_SEND_TRANSACTION", message: "Error signing and sending transaction",
+              details: nil))
+        }
       } else {
         result(FlutterError(code: "INVALID_ARGUMENTS", message: "Invalid arguments", details: nil))
       }
@@ -101,7 +107,6 @@ public class MethodChannel: NSObject, FlutterPlugin {
       if let arguments = call.arguments as? [String: Any],
         let webClientId = arguments["webClientId"] as? String
       {
-
         do {
           let credential = try await HyphenAuthenticate.shared.authenticate(provider: .google)
           // iOS method does not use webClientId
@@ -111,8 +116,6 @@ public class MethodChannel: NSObject, FlutterPlugin {
             FlutterError(
               code: "google_auth_error", message: "Error authenticating with Google", details: nil))
         }
-
-        result(nil)
       } else {
         result(FlutterError(code: "INVALID_ARGUMENTS", message: "Invalid arguments", details: nil))
       }
@@ -121,7 +124,6 @@ public class MethodChannel: NSObject, FlutterPlugin {
       if let arguments = call.arguments as? [String: Any],
         let webClientId = arguments["webClientId"] as? String
       {
-
         do {
           let credential = try await HyphenAuthenticate.shared.authenticate(provider: .google)
           // iOS method does not use webClientId
@@ -131,8 +133,6 @@ public class MethodChannel: NSObject, FlutterPlugin {
             FlutterError(
               code: "google_auth_error", message: "Error authenticating with Google", details: nil))
         }
-
-        result(nil)
       } else {
         result(FlutterError(code: "INVALID_ARGUMENTS", message: "Invalid arguments", details: nil))
       }
