@@ -79,9 +79,7 @@ public class MethodChannel: NSObject, FlutterPlugin {
 
         let transaction = try await HyphenFlow.shared.makeSignedTransactionPayloadWithArguments(
           hyphenFlowCadence: cadenceScript,
-          args: [
-            argumentsList
-          ]
+          args: argumentsList
         )
 
         let txHash = try await HyphenFlow.shared.sendSignedTransaction(transaction)
