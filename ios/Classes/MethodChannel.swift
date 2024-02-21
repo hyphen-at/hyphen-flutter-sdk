@@ -105,7 +105,7 @@ public class MethodChannel: NSObject, FlutterPlugin {
       {
 
         do {
-          let credential = try await HyphenGoogleAuthenticate.shared.authenticate()
+          let credential = try await HyphenAuthenticate.shared.authenticate(provider: .google)
           // iOS method does not use webClientId
           result(credential)
         } catch {
@@ -125,7 +125,7 @@ public class MethodChannel: NSObject, FlutterPlugin {
       {
 
         do {
-          let credential = try await HyphenGoogleAuthenticate.shared.authenticate()
+          let credential = try await HyphenAuthenticate.shared.authenticate(provider: .google)
           // iOS method does not use webClientId
           result(credential)
         } catch {
@@ -144,3 +144,4 @@ public class MethodChannel: NSObject, FlutterPlugin {
     }
   }
 }
+
