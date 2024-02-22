@@ -73,8 +73,7 @@ public class MethodChannel: NSObject, FlutterPlugin {
     case "signAndSendTransaction":
       if let arguments = call.arguments as? [String: Any],
         let cadenceScript = arguments["cadenceScript"] as? String,
-        let argumentsList = arguments["arguments"] as? [[String: Any]],
-        let withAuthorizer = arguments["withAuthorizer"] as? Bool
+        let argumentsList = arguments["arguments"] as? [[String: Any]]
       {
         do {
           let transaction = try await HyphenFlow.shared.makeSignedTransactionPayloadWithArguments(
