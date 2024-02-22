@@ -2,7 +2,6 @@ import Flutter
 import HyphenAuthenticate
 import HyphenCore
 import HyphenFlow
-import HyphenGoogleAuthenticate
 import UIKit
 
 public class MethodChannel: NSObject, FlutterPlugin {
@@ -76,6 +75,11 @@ public class MethodChannel: NSObject, FlutterPlugin {
         let argumentsList = arguments["arguments"] as? [[String: Any]]
       {
         do {
+
+          let cadence = HyphenFlowCadence(
+            cadence: cadenceScript
+          )
+
           let transaction = try await HyphenFlow.shared.makeSignedTransactionPayloadWithArguments(
             hyphenFlowCadence: cadenceScript,
             args: argumentsList
